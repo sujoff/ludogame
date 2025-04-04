@@ -13,21 +13,18 @@
 ### Steps
 1. **Clone the Repository**
   
-   git clone <repository-url>
-   cd <repository-directory>
+   `git clone <repository-url>`
+   `cd <repository-directory>`
 
 Build and Deploy
 Ensure the LudoServer directory and Dockerfile are in the current directory.
 Run the deployment script:
-bash
+</br>
 
-Collapse
+`chmod +x Upgrade.sh`
+`./Upgrade.sh`
 
-Wrap
 
-Copy
-chmod +x Upgrade.sh
-./Upgrade.sh
 The script will:
 Build a new Docker image (ludo-server-image:<timestamp>).
 Deploy the new container on a temporary port (7771 or 7772).
@@ -37,35 +34,11 @@ Clean up old images.
 Verify Deployment
 Check the running container:
 
-docker ps
+`docker ps`
+</br>
 Test connectivity from another machine:
-bash
 
-Collapse
+`nc -u -v <server-ip> 7770`
 
-Wrap
-
-Copy
-nc -u -v <server-ip> 7770
 Notes
 Downtime: ~2 seconds during deployment.
-Lightsail Migration: Use the $5/month plan (1 GB RAM, 1 vCPU, 40 GB SSD, Mumbai region). Ensure the Lightsail firewall allows UDP on port 7770.
-text
-
-Collapse
-
-Wrap
-
-Copy
-
----
-
-### Explanation:
-- **Format**: Written in Markdown with code blocks (```bash) for commands, making it easy to read and copy-paste.
-- **Content**:
-  - **Overview**: Briefly describes the project (Ludo game server, FishNet/LiteNetLib, UDP, blue-green deployment).
-  - **Deployment Instructions**: Provides clear steps to deploy the server locally or on a similar environment, including prerequisites, cloning, running the script, and verifying the deployment.
-  - **Notes**: Mentions the downtime, Lightsail migration details, and firewall requirements.
-- **Length**: Kept short and to the point, focusing on essential information.
-
-Let me know if you’d like to add more details or adjust the format!
