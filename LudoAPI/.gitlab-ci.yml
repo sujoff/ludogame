@@ -1,0 +1,86 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  AWS_REGION: $AWS_REGION
+  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  ECR_REPOSITORY: $ECR_REPOSITORY  # Replace with your repo name
+  IMAGE_TAG: $IMAGE_TAG  # Set the image tag
+  AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID  # Replace with your AWS account ID
+  EC2_HOST: $EC2_HOST  # Replace with your EC2 host IP or domain
+  EC2_USER: $EC2_USER  # Replace if you use a different user
+  DOCKER_DRIVER: overlay2  # Ensure the Docker driver is compatible
+
+# Stage 1: Build and push Docker image to ECR
+build-and-push:
+  stage: build
+  image: docker:24.0.5  # Docker image to handle Docker commands
+  services:
+    - docker:24.0.5-dind  # Use a compatible version of Docker-in-Docker
+  variables:
+    DOCKER_TLS_CERTDIR: ""  # Disable TLS for Docker-in-Docker
+  before_script:
+    # Enable privileged mode and prepare the environment
+    - apk add --no-cache python3 py3-pip
+    - pip3 install awscli
+    - aws --version
+    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - aws configure set region $AWS_REGION
+  script:
+    # Login to Amazon ECR
+    - echo $AWS_ACCESS_KEY_ID
+    - echo $AWS_SECRET_ACCESS_KEY
+    - echo $AWS_REGION
+    - echo "Logging in to Amazon ECR..."
+    - echo "Docker login command -> aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+
+    - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+    # Build Docker image and push to ECR
+    - echo "Building and pushing Docker image..."
+    - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG .
+    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+  only:
+    - devops
+
+# Stage 2: Deploy the image to EC2 and run Laravel migrations
+deploy-to-ec2:
+  stage: deploy
+  image: alpine:latest  # Lightweight Alpine image to SSH into EC2
+  before_script:
+    # Prepare SSH for EC2 access
+    - apk add --no-cache openssh
+    - mkdir -p ~/.ssh
+    - echo "$EC2_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa  # Use GitLab CI/CD variable for the private key
+    - chmod 600 ~/.ssh/id_rsa
+  script:
+    - |
+      ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
+
+        export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
+        export AWS_REGION=$AWS_REGION
+        export ECR_REPOSITORY=$ECR_REPOSITORY
+        export IMAGE_TAG=$IMAGE_TAG
+
+        # login to aws ecr
+        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+        # Pull the Docker image from ECR
+        docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+        docker stop ludo-api-container
+        docker rm ludo-api-container
+
+        # Run the new container
+        echo "docker run -d --name ludo-api-container -p 8000:80 --env-file .env $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG"
+        docker run -d --name ludo-api-container -p 8000:80 --env-file .env $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+        # Run Laravel migrations
+        docker exec ludo-api-container php artisan migrate --force
+      EOF
+
+      

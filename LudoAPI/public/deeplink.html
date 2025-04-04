@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Our App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            gap: 10px; 
+        }
+        .button {
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        
+    </style>
+</head>
+<body>
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function tryOpen() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const roomCode = getQueryParam('room_code');
+            const deepLink = roomCode ? `juctionludo://mylink?${roomCode}` : '';
+
+            if (userAgent.match(/iPhone|iPad|iPod/i)) {
+                // Redirect to a webpage if on iOS
+                if (deepLink) {
+                    window.location = deepLink;
+                }
+                setTimeout(() => {
+                    document.getElementById('downloadLinks').style.display = 'block';
+                }, 3000); 
+            } else if (userAgent.match(/Android/i)) {
+                // Try to open the app with the custom URL scheme
+                if (deepLink) {
+                    window.location = deepLink;
+                }
+                setTimeout(() => {
+                    document.getElementById('downloadLinks').style.display = 'block';
+                }, 3000); // Adjust timing as needed
+            } else {
+                // Handle other platforms or fallback
+                document.getElementById('downloadLinks').style.display = 'block';
+            }
+        }
+
+        window.onload = tryOpen;
+    </script>
+   
+    <div id="downloadLinks" style="display: none;">
+        <h2>Don't have the app?</h2>
+        <p>You can download it from one of the stores below:</p>
+        <div class="button-container">
+            <!-- Google Play Store Button -->
+            <a class="button" href="https://play.google.com/store/apps/details?id=com.armangames.ludojunction" target="_blank">
+                <img alt="Get it on Google Play" 
+                src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="150" height="60">
+            </a>
+
+            <!-- Apple App Store Button -->
+            <a class="button" href="https://apps.apple.com/app/id6472210080" target="_blank">
+                <img alt="Download on the App Store" 
+                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="150" height="40">
+            </a>
+        </div>
+    </div>
+</body>
+</html>

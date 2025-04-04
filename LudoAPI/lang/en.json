@@ -1,0 +1,6 @@
+{
+    "message.spinWheel.success": "Spin wheel success",
+    "message.spinWheel_not_found": "Spin wheel not found",
+    "message.spinWheel.allowed": "Spin wheel allowed",
+    "message.spinWheel.not_allowed": "Spin wheel not allowed"
+}
