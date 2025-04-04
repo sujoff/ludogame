@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "210971661661",
+    "project_id": "ludo-junction-100fc",
+    "storage_bucket": "ludo-junction-100fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210971661661:android:37fc32220f0da3b68d44b4",
+        "android_client_info": {
+          "package_name": "com.armangames.ludojunction"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzyYzze8rgZQNB8kgsI4PxBVQ1LAxBGgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

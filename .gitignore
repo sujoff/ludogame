@@ -1,4 +1,4 @@
 *.log
-LudoServer/server_Data/
+LudoServer/server_Data/Plugins/
 LudoServer/server.x86_64
 LudoServer/GameAssembly.so
