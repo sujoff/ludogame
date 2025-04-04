@@ -13,7 +13,7 @@
 ### Steps
 1. **Clone the Repository**
   
-   `git clone <repository-url>`
+   `git clone <repository-url>`</br>
    `cd <repository-directory>`
 
 Build and Deploy
@@ -22,8 +22,9 @@ Run the deployment script:
 </br>
 
 `chmod +x Upgrade.sh`
+</br>
 `./Upgrade.sh`
-
+</br>
 
 The script will:
 Build a new Docker image (ludo-server-image:<timestamp>).
