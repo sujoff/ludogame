@@ -28,7 +28,7 @@ COPY LudoServer/ .
 # Ensure the server binary is executable
 RUN chmod +x server.x86_64 \
     # Set proper permissions for the plugins and server data
-    && chmod -R 5 /app/server_Data/Plugins
+    && chmod -R 755 /app/server_Data/Plugins
 
 # Expose the port used by the game server
 EXPOSE 7770
