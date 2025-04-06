@@ -7,7 +7,7 @@
 ## Cloud Configuration:
 ⚠️ I've migrated application currently from EC2 to Lightsail due to client's requirement.
 Our setup includes:
-1. EC2 setup ( launch new instance (ubuntu) , attach elastic IP, configure VPC)
+1. EC2 setup ( launch new instance (ubuntu), VPC configuration, attach elastic IP)
 2. Install Docker, Unity build packages, unity compiler tools.
 3. Open ports (7770)
 
