@@ -2,7 +2,19 @@
 
 ## Overview
 - **Description**: A lightweight Ludo game server built with FishNet and LiteNetLib, supporting multiplayer gameplay over UDP on port 7770.
-- **Deployment**: Uses a blue-green deployment strategy with Docker for minimal downtime (~2 seconds).
+- **Deployment**: On EC2 instance. Uses a blue-green deployment strategy with Docker for minimal downtime (~2 seconds).
+
+## Cloud Configuration:
+⚠️ I've migrated application currently from EC2 to Lightsail due to client's requirement.
+Our setup includes:
+1. EC2 setup ( launch new instance (ubuntu) , attach elastic IP, configure VPC)
+2. Install Docker, Unity build packages, unity compiler tools.
+3. Open ports (7770)
+
+![alt text](image.png)
+</br>
+![alt text](image-1.png)
+
 
 ## Deployment Instructions
 
@@ -16,8 +28,9 @@
    `git clone <repository-url>`</br>
    `cd <repository-directory>`
 
-Build and Deploy
-Ensure the LudoServer directory and Dockerfile are in the current directory.
+## Build and Deploy: **Blue-Green**
+
+Make sure the LudoServer directory and Dockerfile are in the current directory.
 Run the deployment script:
 </br>
 
