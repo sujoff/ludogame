@@ -3,3 +3,4 @@ LudoServer/server.x86_64
 LudoServer/GameAssembly.so
 LudoServer/server_Data/StreamingAssets/google-services-desktop.json
 .gitlab-ci.yml
+LudoAPI/

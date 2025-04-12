@@ -1,0 +1,12 @@
+1. ssh to remote machine. 
+2. Run following command. Prompt, your local LudoServer directory should contain two folders:  Port70, Port71?
+    ask y/n. if yes then user will type y and enter. 
+3. Run rsync command, it should show the transfer progress. : 
+
+rsync -avz --delete -e "ssh -i /Volumes/Transcend/Aws/devkey.pem" /Volumes/Transcend/Projects/ludo/builds/server/LinuxServer/ ubuntu@13.235.166.28:/home/ubuntu/LudoServer
+
+4. Now run ssh to the above machine, same way.
+
+5. Remove the the dangling images. docker rmi $(docker images -f dangling=true -q)
+
+6. We'll build an image

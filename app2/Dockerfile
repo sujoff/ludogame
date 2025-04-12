@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy the game server files from the LudoServer directory into the container
-COPY LudoServer/ .
+COPY . .
 
 # Ensure the server binary is executable
 RUN chmod +x server.x86_64 \
@@ -31,7 +31,7 @@ RUN chmod +x server.x86_64 \
     && chmod -R 755 /app/server_Data/Plugins
 
 # Expose the port used by the game server
-EXPOSE 7770
+EXPOSE 7771
 
 # Command to run the game server
 CMD ["./server.x86_64"]
